@@ -10,6 +10,13 @@ python_aws_lambda_function(
 python_aws_lambda_layer(
     name="layer",
     runtime="python3.12",
-    dependencies=[":function", "//:root#aws-lambda-powertools"],
+    dependencies=[":function", "!!//:root#aws-lambda-powertools"],
+    include_sources=False,
+)
+
+python_aws_lambda_layer(
+    name="powertools",
+    runtime="python3.12",
+    dependencies=["//:root#aws-lambda-powertools"],
     include_sources=False,
 )
