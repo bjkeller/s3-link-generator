@@ -1,4 +1,4 @@
-"""Simple Lambda function example without database"""
+"""Simple Lambda function example without database."""
 
 import json
 from typing import Any, Dict
@@ -11,66 +11,70 @@ logger = Logger()
 
 def lambda_handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
     """Handle HTTP API requests.
-    
+
     Args:
         event: API Gateway event
         context: Lambda context
-        
+
     Returns:
         API Gateway response
     """
-    logger.info("Processing request", extra={
-        "request_id": context.aws_request_id,
-        "path": event.get("path"),
-        "method": event.get("httpMethod")
-    })
-    
+    logger.info(
+        "Processing request",
+        extra={
+            "request_id": context.aws_request_id,
+            "path": event.get("path"),
+            "method": event.get("httpMethod"),
+        },
+    )
+
     try:
         # Extract request data
-        body = json.loads(event.get("body", "{}"))
-        
+        body = json.loads(event.get("body") or "{}")
+
         # Process request
         result = {
             "message": "Hello from Lambda!",
             "request_id": context.aws_request_id,
-            "input": body
+            "input": body,
         }
-        
-        logger.info("Request processed successfully", extra={
-            "request_id": context.aws_request_id
-        })
-        
+
+        logger.info(
+            "Request processed successfully",
+            extra={"request_id": context.aws_request_id},
+        )
+
         return {
             "statusCode": 200,
             "headers": {
                 "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*"
+                "Access-Control-Allow-Origin": "*",
             },
-            "body": json.dumps(result)
+            "body": json.dumps(result),
         }
-        
+
     except json.JSONDecodeError as e:
-        logger.warning("Invalid JSON in request body", extra={
-            "error": str(e),
-            "request_id": context.aws_request_id
-        })
+        logger.warning(
+            "Invalid JSON in request body",
+            extra={"error": str(e), "request_id": context.aws_request_id},
+        )
         return error_response(400, "Invalid JSON format")
-        
+
     except Exception as e:
-        logger.error("Unexpected error", extra={
-            "error": str(e),
-            "request_id": context.aws_request_id
-        })
+        logger.error(
+            "Unexpected error",
+            extra={"error": str(e), "request_id": context.aws_request_id},
+        )
         return error_response(500, "Internal server error")
 
 
 def error_response(status_code: int, message: str) -> Dict[str, Any]:
     """Create standardized error response.
-    
+
     Args:
         status_code: HTTP status code
         message: Error message
-        
+
     Returns:
         Error response
     """
@@ -78,7 +82,7 @@ def error_response(status_code: int, message: str) -> Dict[str, Any]:
         "statusCode": status_code,
         "headers": {
             "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*"
+            "Access-Control-Allow-Origin": "*",
         },
-        "body": json.dumps({"error": message})
+        "body": json.dumps({"error": message}),
     }
