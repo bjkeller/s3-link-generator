@@ -75,7 +75,7 @@ Pants is used for all builds, testing, linting, and packaging in this monorepo.
 
 ## Infrastructure
 
-- **Terraform** — Infrastructure as Code for Lambda deployment
+- **AWS CDK (Python)** — Infrastructure as Code for full stack deployment
 - **AWS Lambda** — Serverless compute (Python 3.12 runtime)
 - **AWS API Gateway** — REST API with API key authentication
 - **AWS S3** — Target buckets for pre-signed URL generation

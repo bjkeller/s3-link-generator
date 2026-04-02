@@ -23,9 +23,12 @@ s3-presigned-url-service/
 │       ├── test/python/
 │       │   ├── BUILD
 │       │   └── test_lambda_function.py
-│       ├── main.tf
-│       ├── variables.tf
-│       └── outputs.tf
+├── infra/                      # CDK infrastructure
+│   ├── app.py
+│   ├── stacks/
+│   │   └── presign_stack.py
+│   ├── cdk.json
+│   └── requirements.txt
 ├── docs/                       # Documentation
 ├── examples/                   # Example lambda implementations (for reference)
 │   ├── simple-lambda/
@@ -54,10 +57,9 @@ lambda/<lambda_name>/
 ├── test/python/
 │   ├── BUILD                  # python_sources + python_tests targets
 │   └── test_lambda_function.py
-├── main.tf                    # Terraform configuration
-├── variables.tf               # Terraform variables
-└── outputs.tf                 # Terraform outputs
 ```
+
+CDK infrastructure lives separately in `infra/` at the repo root.
 
 ### Lambda BUILD File Pattern
 
@@ -74,12 +76,14 @@ python_aws_lambda_function(
 python_aws_lambda_layer(
     name="layer",
     runtime="python3.12",
-    dependencies=[
-        ":function",
-        "//:root#boto3",
-        "//:root#pydantic",
-        "//:root#aws-lambda-powertools",
-    ],
+    dependencies=[":function", "!!//:root#aws-lambda-powertools"],
+    include_sources=False,
+)
+
+python_aws_lambda_layer(
+    name="powertools",
+    runtime="python3.12",
+    dependencies=["//:root#aws-lambda-powertools"],
     include_sources=False,
 )
 ```
@@ -108,5 +112,5 @@ Pants ignores:
 
 The `prompts/` directory contains structured prompts for spec-based agent development:
 - `01-lambda.md` — S3 presign Lambda behavior, client registry, and testing requirements
-- `02-api.md` — API Gateway, SAM template, authentication, and infrastructure
+- `02-api.md` — API Gateway, CDK stack, authentication, and infrastructure
 - `03-web-app.md` — Quick Access Link web app (consumer of the presign API)

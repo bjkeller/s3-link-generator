@@ -11,7 +11,7 @@ S3 Presigned URL Service is a Pants-managed monorepo containing an AWS Lambda fu
 
 ## Key Components
 
-- **Lambda Function**: `lambda/s3_signed_url/` — source, tests, and Terraform for the presign lambda
+- **Lambda Function**: `lambda/s3_signed_url/` — source and tests for the presign lambda
 - **Client Registry**: Maps app client identifiers to allowed buckets and max expiration (DynamoDB or SSM — decided during spec)
 - **API Layer**: API Gateway with API key auth, IP restriction, request validation, and usage plans
 
