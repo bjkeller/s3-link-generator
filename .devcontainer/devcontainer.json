@@ -1,5 +1,5 @@
 {
-  "name": "User Management System",
+  "name": "S3 Presigned URL Service",
   
   "build": {
     "dockerfile": "Dockerfile"
