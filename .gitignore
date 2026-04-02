@@ -171,6 +171,10 @@ cython_debug/
 *.tfplan
 *.tfvars.backup
 
+# AWS CDK
+cdk.out/
+cdk.context.json
+
 # AWS
 .aws/
 
