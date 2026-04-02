@@ -1,0 +1,6 @@
+line-length = 88
+indent-width = 4
+target-version = "py312"
+
+[lint]
+select = ["A", "B", "E", "W", "F", "I", "RUF", "SIM", "C90", "PLW0406", "COM818", "SLF001"]
