@@ -4,7 +4,7 @@ import json
 from unittest.mock import MagicMock
 
 import pytest
-from simple_lambda.lambda_function import lambda_handler
+from s3_signed_url_lambda.lambda_function import lambda_handler
 
 
 @pytest.fixture
