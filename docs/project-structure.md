@@ -77,7 +77,7 @@ backend_packages.add = [
 root_patterns = ["src/*", "test/*"]
 
 [python]
-interpreter_constraints = ["==3.11.*"]
+interpreter_constraints = ["==3.12.*"]
 ```
 
 #### `BUILD`
@@ -170,14 +170,14 @@ python_sources(name="function")
 
 python_aws_lambda_function(
     name="lambda",
-    runtime="python3.11",
+    runtime="python3.12",
     handler="lambda_function.py:lambda_handler",
     include_requirements=False,
 )
 
 python_aws_lambda_layer(
     name="layer",
-    runtime="python3.11",
+    runtime="python3.12",
     dependencies=[
         ":function",
         "//common/src/python/auth:lib",
@@ -351,7 +351,7 @@ dependencies=[
 ```python
 python_aws_lambda_layer(
     name="layer",
-    runtime="python3.11",
+    runtime="python3.12",
     dependencies=[":function", "//:root"],
     include_sources=False,
 )
@@ -361,7 +361,7 @@ python_aws_lambda_layer(
 ```python
 python_aws_lambda_layer(
     name="layer",
-    runtime="python3.11",
+    runtime="python3.12",
     dependencies=[
         ":function",
         "//common/src/python/database:lib",

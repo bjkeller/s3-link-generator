@@ -176,7 +176,7 @@ variable "lambda_handler" {
 variable "runtime" {
   description = "Lambda runtime"
   type        = string
-  default     = "python3.11"
+  default     = "python3.12"
 }
 
 variable "timeout" {
@@ -723,7 +723,7 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.11'
+        python-version: '3.12'
     
     - name: Install dependencies
       run: |

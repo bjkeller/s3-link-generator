@@ -178,14 +178,14 @@ python_sources(name="function")
 
 python_aws_lambda_function(
     name="lambda",
-    runtime="python3.11",
+    runtime="python3.12",
     handler="lambda_function.py:lambda_handler",
     include_requirements=False,
 )
 
 python_aws_lambda_layer(
     name="layer",
-    runtime="python3.11",
+    runtime="python3.12",
     dependencies=[":function", "//:root"],
     include_sources=False,
 )
@@ -266,7 +266,7 @@ pants generate-lockfiles
 # Build layer with specific dependencies
 python_aws_lambda_layer(
     name="custom_layer",
-    runtime="python3.11",
+    runtime="python3.12",
     dependencies=["//:root#requests", "//:root#boto3"],
     include_sources=False,
 )

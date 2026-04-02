@@ -56,7 +56,7 @@ root_patterns = [
 ]
 
 [python]
-interpreter_constraints = ["==3.11.*"]
+interpreter_constraints = ["==3.12.*"]
 enable_resolves = true
 resolves = { python-default = "python-default.lock"}
 
@@ -103,7 +103,7 @@ psycopg2-binary>=2.9.0
 ```json
 {
     "name": "My Lambda Project",
-    "image": "mcr.microsoft.com/devcontainers/python:1-3.11-bullseye",
+    "image": "mcr.microsoft.com/devcontainers/python:1-3.12-bullseye",
     "features": {
         "ghcr.io/devcontainers/features/aws-cli:1": {},
         "ghcr.io/devcontainers/features/docker-in-docker:2": {
@@ -139,7 +139,7 @@ psycopg2-binary>=2.9.0
 ```toml
 line-length = 88
 indent-width = 4
-target-version = "py311"
+target-version = "py312"
 
 [lint]
 select = ["A", "B", "E", "W", "F", "I", "RUF", "SIM", "C90", "PLW0406", "COM818", "SLF001"]
@@ -210,14 +210,14 @@ python_sources(name="function")
 
 python_aws_lambda_function(
     name="lambda",
-    runtime="python3.11",
+    runtime="python3.12",
     handler="lambda_function.py:lambda_handler",
     include_requirements=False,
 )
 
 python_aws_lambda_layer(
     name="layer",
-    runtime="python3.11",
+    runtime="python3.12",
     dependencies=[":function", "//:root"],
     include_sources=False,
 )
@@ -344,7 +344,7 @@ variable "lambda_handler" {
 variable "runtime" {
   description = "Lambda runtime"
   type        = string
-  default     = "python3.11"
+  default     = "python3.12"
 }
 
 variable "role_arn" {
