@@ -1,67 +1,90 @@
-# AWS Lambda Monorepo Template
+# S3 Pre-Signed URL Service
 
-This directory contains template files and documentation for creating new AWS Lambda monorepos using Pants build system and Terraform for infrastructure.
+A generic AWS Lambda service that generates pre-signed S3 download URLs for authorized app clients. Built with Pants build system and Terraform for infrastructure management.
+
+## Overview
+
+This service provides a single API endpoint (`GET /presign`) that:
+1. Authenticates the caller via API key
+2. Validates the client is authorized for the requested S3 bucket
+3. Returns a time-limited pre-signed download URL
+
+The first consumer is the NACC Quick Access Link web app, but the service is designed to be reusable by any internal tool that needs pre-signed S3 URLs.
 
 ## Quick Start
 
-1. **Copy template files** to your new repository
-2. **Customize configuration** files for your project
-3. **Follow setup guide** in `docs/setup-guide.md`
-4. **Use development workflow** in `docs/development-workflow.md`
+1. Install prerequisites
+   ```bash
+   npm install -g @devcontainers/cli
+   ```
 
-## Template Structure
+2. Start development environment
+   ```bash
+   ./bin/build-container.sh
+   ./bin/start-devcontainer.sh
+   ./bin/terminal.sh
+   ```
+
+3. Build and test
+   ```bash
+   pants fix lint check test ::
+   ```
+
+4. Deploy
+   ```bash
+   pants package lambda/s3_signed_url/src/python/s3_signed_url_lambda::
+   cd lambda/s3_signed_url
+   terraform init
+   terraform apply
+   ```
+
+## Project Structure
 
 ```
-lambda-monorepo-template/
-├── README.md                    # This file
-├── docs/                        # Documentation
-│   ├── setup-guide.md          # Step-by-step setup instructions
-│   ├── development-workflow.md  # Daily development workflow
-│   ├── project-structure.md    # Repository organization patterns
-│   ├── lambda-patterns.md      # Lambda implementation patterns
-│   └── deployment-guide.md     # Terraform deployment guide
-├── templates/                   # Template files to copy
-│   ├── config/                 # Configuration files
-│   ├── devcontainer/           # Dev container setup
-│   ├── lambda-example/         # Sample lambda structure
-│   └── scripts/                # Helper scripts
-└── examples/                    # Example implementations
-    ├── simple-lambda/          # Basic lambda without database
-    ├── database-lambda/        # Lambda with database connection
-    └── batch-processing/       # Batch processing lambda
+.
+├── lambda/s3_signed_url/      # Pre-sign Lambda function
+│   ├── src/python/            # Lambda source code
+│   ├── test/python/           # Lambda tests
+│   ├── main.tf                # Terraform configuration
+│   ├── variables.tf           # Terraform variables
+│   └── outputs.tf             # Terraform outputs
+├── prompts/                   # Spec prompts for agent-driven development
+│   ├── 01-lambda.md           # Lambda implementation spec
+│   ├── 02-api.md              # API Gateway / SAM spec
+│   └── 03-web-app.md          # Quick Access Link web app spec
+├── examples/                  # Reference lambda implementations
+├── bin/                       # Development scripts
+├── .devcontainer/             # Dev container configuration
+└── docs/                      # Documentation
 ```
 
-## Key Features
+## Development Workflow
 
-- **Pants Build System** - Modern Python monorepo management
-- **Dev Containers** - Consistent development environment
-- **Terraform Integration** - Infrastructure as Code
-- **AWS Lambda Powertools** - Production-ready logging and tracing
-- **Type Safety** - MyPy and Pydantic for robust code
-- **Code Quality** - Automated formatting and linting
+```bash
+# Start container
+./bin/start-devcontainer.sh
 
-## Documentation Overview
+# Open shell
+./bin/terminal.sh
 
-### Essential Reading
-1. **Setup Guide** - Complete project initialization
-2. **Development Workflow** - Daily development patterns
-3. **Project Structure** - Repository organization
+# Code quality pipeline
+pants fix ::
+pants lint ::
+pants check ::
+pants test ::
+```
 
-### Reference Documentation
-4. **Lambda Patterns** - Implementation templates
-5. **Deployment Guide** - Terraform and AWS deployment
+## Documentation
 
-## Getting Started
+- [Setup Guide](docs/setup-guide.md)
+- [Development Workflow](docs/development-workflow.md)
+- [Project Structure](docs/project-structure.md)
+- [Lambda Patterns](docs/lambda-patterns.md)
+- [Deployment Guide](docs/deployment-guide.md)
 
-1. Read the setup guide: `docs/setup-guide.md`
-2. Copy template files to your new repository
-3. Follow the customization checklist
-4. Start building your first lambda
+## Requirements
 
-## Support
-
-This template is based on production patterns from the NACC Identifiers project and includes best practices for:
-- Security and compliance
-- Performance optimization
-- Maintainable code structure
-- Scalable infrastructure
+- Docker (for dev containers)
+- Node.js (for devcontainer CLI)
+- AWS CLI (configured in container)
+- Terraform (available in container)
