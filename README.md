@@ -1,6 +1,6 @@
 # S3 Pre-Signed URL Service
 
-A generic AWS Lambda service that generates pre-signed S3 download URLs for authorized app clients. Built with Pants build system and Terraform for infrastructure management.
+A generic AWS Lambda service that generates pre-signed S3 download URLs for authorized app clients. Built with Pants build system and AWS CDK for infrastructure.
 
 ## Overview
 
@@ -33,9 +33,8 @@ The first consumer is the NACC Quick Access Link web app, but the service is des
 4. Deploy
    ```bash
    pants package lambda/s3_signed_url/src/python/s3_signed_url_lambda::
-   cd lambda/s3_signed_url
-   terraform init
-   terraform apply
+   cd infra
+   cdk deploy --context environment=dev
    ```
 
 ## Project Structure
@@ -44,13 +43,15 @@ The first consumer is the NACC Quick Access Link web app, but the service is des
 .
 ├── lambda/s3_signed_url/      # Pre-sign Lambda function
 │   ├── src/python/            # Lambda source code
-│   ├── test/python/           # Lambda tests
-│   ├── main.tf                # Terraform configuration
-│   ├── variables.tf           # Terraform variables
-│   └── outputs.tf             # Terraform outputs
+│   └── test/python/           # Lambda tests
+├── infra/                     # CDK infrastructure stack
+│   ├── app.py
+│   ├── stacks/
+│   ├── cdk.json
+│   └── requirements.txt
 ├── prompts/                   # Spec prompts for agent-driven development
 │   ├── 01-lambda.md           # Lambda implementation spec
-│   ├── 02-api.md              # API Gateway / SAM spec
+│   ├── 02-api.md              # API Gateway / CDK spec
 │   └── 03-web-app.md          # Quick Access Link web app spec
 ├── examples/                  # Reference lambda implementations
 ├── bin/                       # Development scripts
@@ -85,6 +86,6 @@ pants test ::
 ## Requirements
 
 - Docker (for dev containers)
-- Node.js (for devcontainer CLI)
+- Node.js (for devcontainer CLI and CDK)
 - AWS CLI (configured in container)
-- Terraform (available in container)
+- AWS CDK (available in container)
