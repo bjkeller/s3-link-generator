@@ -17,7 +17,7 @@ pants_ignore = [
 [source]
 root_patterns = [
     "src/*", "test/*",
-    "/infra", "/infra/tests"
+    "/infra",
 ]
 
 [python]
