@@ -2,7 +2,6 @@
 
 import json
 import os
-from typing import Any
 from unittest.mock import MagicMock
 
 import boto3
@@ -85,8 +84,8 @@ class TestBucketAuthorizationMatchesAllowlist:
 # Feature: s3-presign-lambda, Property 5:
 # Expiration resolution is capped correctly
 class TestExpirationResolutionCapping:
-    """Property 5: Resolved expiration equals
-    min(requested_or_default, client_max, 604800).
+    """Property 5: Resolved expiration equals min(requested_or_default,
+    client_max, 604800).
 
     Tests through the public lambda_handler interface by
     observing the ``expires_in`` field in the 200 response.
@@ -100,10 +99,12 @@ class TestExpirationResolutionCapping:
             integers(min_value=1, max_value=1_000_000),
         ),
         client_max=integers(
-            min_value=1, max_value=1_000_000,
+            min_value=1,
+            max_value=1_000_000,
         ),
         default_exp=integers(
-            min_value=1, max_value=1_000_000,
+            min_value=1,
+            max_value=1_000_000,
         ),
     )
     @settings(max_examples=100, deadline=None)
@@ -127,31 +128,27 @@ class TestExpirationResolutionCapping:
         try:
             with mock_aws():
                 ssm = boto3.client(
-                    "ssm", region_name="us-east-1",
+                    "ssm",
+                    region_name="us-east-1",
                 )
                 sm = boto3.client(
                     "secretsmanager",
                     region_name="us-east-1",
                 )
                 register_client(
-                    ssm, max_expiration=client_max,
+                    ssm,
+                    max_expiration=client_max,
                 )
                 store_signing_credentials(sm)
 
-                exp_str = (
-                    str(requested) if requested is not None
-                    else None
-                )
+                exp_str = str(requested) if requested is not None else None
                 event = make_apigw_event(expiration=exp_str)
                 resp = lambda_handler(event, ctx)
 
             assert resp["statusCode"] == 200
             body = json.loads(resp["body"])
 
-            effective = (
-                requested if requested is not None
-                else default_exp
-            )
+            effective = requested if requested is not None else default_exp
             expected = min(
                 effective,
                 client_max,
